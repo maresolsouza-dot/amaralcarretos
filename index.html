@@ -18,6 +18,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18371445900"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18371445900');
+</script>
+
 <!-- ============================================================
      IDENTIDADE  ·  Amaral Carretos
      Tirada do caminhao: carroceria de ripas de madeira, estacas
@@ -313,10 +322,156 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
   .surge.ver{opacity:1;transform:none}
 }
 
+/* ---------- chegada do caminhão ---------- */
+.caminhao{overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.caminhao:focus-visible{outline:2px solid var(--caramelo);outline-offset:4px;border-radius:4px}
+@media (prefers-reduced-motion:no-preference){
+  .caminhao.buzinou .corpo{animation:pulinho .42s cubic-bezier(.3,1.5,.5,1)}
+  .caminhao.buzinou .carga{animation:tremida .5s cubic-bezier(.3,1.4,.5,1)}
+}
+@keyframes pulinho{
+  0%{transform:translateY(0) rotate(0)}
+  28%{transform:translateY(-4px) rotate(-.9deg)}
+  58%{transform:translateY(1px) rotate(.5deg)}
+  100%{transform:translateY(0) rotate(0)}
+}
+@keyframes tremida{
+  0%{transform:rotate(0)}
+  25%{transform:rotate(-3deg)}
+  52%{transform:rotate(2deg)}
+  76%{transform:rotate(-.9deg)}
+  100%{transform:rotate(0)}
+}
+.caminhao .veiculo{transform:translateX(-124%)}
+.caminhao .roda,.caminhao .corpo,.caminhao .poeira circle{
+  transform-box:fill-box;transform-origin:center;
+}
+.caminhao .corpo{transform-origin:58% 96%}
+.caminhao .carga{transform-box:fill-box;transform-origin:50% 100%}
+.caminhao .poeira circle{opacity:0}
+
+@media (prefers-reduced-motion:no-preference){
+  .caminhao.rodando .veiculo{animation:chega 1s forwards}
+  .caminhao.rodando .roda{animation:gira 1s cubic-bezier(.17,.63,.28,1) forwards}
+  .caminhao.rodando .corpo{animation:suspensao 1s forwards}
+  .caminhao.rodando .carga{animation:chacoalha 1.3s forwards}
+  .caminhao.rodando .poeira circle{animation:fumaca .8s ease-out forwards}
+  .caminhao.rodando .poeira circle:nth-child(1){animation-delay:.1s}
+  .caminhao.rodando .poeira circle:nth-child(2){animation-delay:.2s}
+  .caminhao.rodando .poeira circle:nth-child(3){animation-delay:.3s}
+  .caminhao.rodando .poeira circle:nth-child(4){animation-delay:.4s}
+  .caminhao.rodando .poeira circle:nth-child(5){animation-delay:.48s}
+  .caminhao.rodando .poeira circle:nth-child(6){animation-delay:.55s}
+}
+@media (prefers-reduced-motion:reduce){
+  .caminhao .veiculo{transform:none}
+}
+
+/* curva de velocidade: entra forte, passa do ponto,
+   recua com o peso do freio e assenta */
+@keyframes chega{
+  0%   {transform:translateX(-124%); animation-timing-function:cubic-bezier(.19,.58,.32,.99)}
+  58%  {transform:translateX(3.1%);  animation-timing-function:cubic-bezier(.36,0,.5,1)}
+  75%  {transform:translateX(-1.3%); animation-timing-function:cubic-bezier(.36,0,.5,1)}
+  89%  {transform:translateX(.45%);  animation-timing-function:cubic-bezier(.36,0,.5,1)}
+  100% {transform:translateX(0)}
+}
+@keyframes gira{
+  0%  {transform:rotate(0deg)}
+  100%{transform:rotate(990deg)}
+}
+/* o nariz mergulha na freada e a mola devolve */
+@keyframes suspensao{
+  0%,50%{transform:rotate(0deg);   animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  62%   {transform:rotate(-1.5deg);animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  74%   {transform:rotate(.75deg); animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  85%   {transform:rotate(-.3deg); animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  94%   {transform:rotate(.1deg)}
+  100%  {transform:rotate(0deg)}
+}
+/* a carga tem inércia própria: balança mais e assenta depois */
+@keyframes chacoalha{
+  0%,40%{transform:rotate(0deg);   animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  52%   {transform:rotate(2.6deg); animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  64%   {transform:rotate(-2deg);  animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  74%   {transform:rotate(1.2deg); animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  83%   {transform:rotate(-.6deg); animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  91%   {transform:rotate(.25deg)}
+  100%  {transform:rotate(0deg)}
+}
+@keyframes fumaca{
+  0%  {opacity:0;   transform:translate(0,0) scale(.32)}
+  16% {opacity:.40}
+  55% {opacity:.22}
+  100%{opacity:0;   transform:translate(-56px,-19px) scale(2.7)}
+}
+
+/* ---------- modal de qualificação ---------- */
+.modal-fundo{
+  position:fixed;inset:0;z-index:200;display:none;
+  background:rgba(28,18,13,.74);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  align-items:flex-end;justify-content:center;
+}
+.modal-fundo.abre{display:flex}
+.modal{
+  position:relative;background:var(--linho);
+  width:100%;max-width:560px;max-height:94vh;overflow-y:auto;
+  border-radius:7px 7px 0 0;border-top:4px solid var(--tijolo);
+  padding:26px 24px calc(24px + env(safe-area-inset-bottom));
+  animation:sobeModal .3s cubic-bezier(.2,.7,.3,1);
+}
+@keyframes sobeModal{from{transform:translateY(26px);opacity:0}to{transform:none;opacity:1}}
+.modal-x{
+  position:absolute;top:12px;right:12px;width:36px;height:36px;
+  background:none;border:none;cursor:pointer;font-size:26px;line-height:1;
+  color:var(--tinta);border-radius:4px;
+}
+.modal-x:hover{background:rgba(122,82,48,.1)}
+.modal h3{
+  font-family:"Bitter",serif;font-weight:700;font-size:24px;
+  color:var(--nogueira);letter-spacing:-.02em;line-height:1.2;
+  margin-bottom:7px;padding-right:34px;
+}
+.modal-sub{font-size:15.5px;color:var(--tinta);margin-bottom:20px;line-height:1.5}
+.campo{margin-bottom:15px}
+.campo label{
+  display:block;font-size:14.5px;font-weight:600;
+  color:var(--nogueira);margin-bottom:6px;
+}
+.campo input,.campo select{
+  width:100%;padding:13px 14px;
+  border:1px solid rgba(122,82,48,.36);border-radius:4px;
+  font-family:"Karla",sans-serif;font-size:16.5px;
+  background:#fff;color:var(--nogueira);
+  -webkit-appearance:none;appearance:none;
+}
+.campo select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a5230' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:38px;
+}
+.campo input:focus,.campo select:focus{
+  outline:2px solid var(--tijolo);outline-offset:1px;border-color:var(--tijolo);
+}
+.erro{display:none;color:var(--tijolo);font-size:13.5px;margin-top:5px;font-weight:600}
+.campo.invalido .erro{display:block}
+.campo.invalido input,.campo.invalido select{border-color:var(--tijolo)}
+.modal .cta{margin-top:6px}
+.pular{
+  display:block;width:100%;margin-top:14px;padding:8px;
+  background:none;border:none;cursor:pointer;
+  font-family:"Karla",sans-serif;font-size:14.5px;color:var(--tinta);
+  text-decoration:underline;text-underline-offset:3px;
+}
+.pular:hover{color:var(--nogueira)}
+
 @media (min-width:620px){
   section{padding:66px 0}
   .hero{padding:60px 0 0}
   .caminhao{margin-top:44px}
+  .modal-fundo{align-items:center}
+  .modal{border-radius:7px;padding-bottom:26px}
 }
 </style>
 </head>
@@ -353,8 +508,8 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
         <div class="selo"><b>Grátis</b><span>orçamento pela foto</span></div>
       </div>
 
-      <div class="caminhao anima d6">
-        <svg viewBox="0 0 430 176" role="img" aria-label="Caminhão de carroceria aberta de madeira da Amaral Carretos">
+      <div class="caminhao" id="caminhao" role="button" tabindex="0" aria-label="Buzinar">
+        <svg viewBox="0 0 430 186" aria-hidden="true">
           <defs>
             <linearGradient id="lat" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stop-color="#c04a34"/><stop offset="1" stop-color="#8e3423"/>
@@ -367,90 +522,148 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
             </linearGradient>
           </defs>
 
+          <g class="veiculo">
           <!-- sombra -->
-          <ellipse cx="215" cy="163" rx="182" ry="8" fill="#1a0f09" opacity=".42"/>
+          <ellipse cx="215" cy="173" rx="182" ry="8" fill="#1a0f09" opacity=".42"/>
 
+          <g class="corpo">
           <!-- chassi -->
-          <rect x="24" y="122" width="372" height="7" rx="2" fill="#241811"/>
+          <rect x="24" y="132" width="372" height="7" rx="2" fill="#241811"/>
+
+          <!-- ============ carga de galhos e podas ============ -->
+          <g class="carga">
+            <!-- galhos grossos -->
+            <g stroke="#6b4326" stroke-linecap="round" fill="none">
+              <path d="M46 62 C 74 34, 104 30, 132 40" stroke-width="5.5"/>
+              <path d="M60 60 C 88 40, 120 46, 150 34" stroke-width="4.5"/>
+              <path d="M92 62 C 120 28, 156 32, 186 48" stroke-width="5"/>
+              <path d="M38 60 C 56 46, 72 52, 88 44" stroke-width="3.6"/>
+              <path d="M150 60 C 172 40, 190 44, 202 36" stroke-width="4.2"/>
+              <!-- ramos finos -->
+              <path d="M104 36 l 14 -13" stroke-width="2.4"/>
+              <path d="M132 40 l 12 -15" stroke-width="2.2"/>
+              <path d="M76 40 l -11 -12" stroke-width="2.2"/>
+              <path d="M168 40 l 10 -14" stroke-width="2"/>
+            </g>
+            <!-- folhagem -->
+            <g opacity=".95">
+              <ellipse cx="63"  cy="42" rx="15" ry="11" fill="#4e7038" transform="rotate(-16 63 42)"/>
+              <ellipse cx="97"  cy="31" rx="18" ry="12" fill="#628a45" transform="rotate(-9 97 31)"/>
+              <ellipse cx="129" cy="27" rx="16" ry="11" fill="#7aa356" transform="rotate(7 129 27)"/>
+              <ellipse cx="158" cy="33" rx="17" ry="11" fill="#557a3c" transform="rotate(-12 158 33)"/>
+              <ellipse cx="186" cy="42" rx="14" ry="10" fill="#6d9a4d" transform="rotate(14 186 42)"/>
+              <ellipse cx="45"  cy="53" rx="12" ry="9"  fill="#5d854230" transform="rotate(-22 45 53)"/>
+              <ellipse cx="80"  cy="49" rx="13" ry="9"  fill="#7aa356" opacity=".8" transform="rotate(11 80 49)"/>
+              <ellipse cx="146" cy="47" rx="13" ry="9"  fill="#4e7038" opacity=".85" transform="rotate(-6 146 47)"/>
+              <ellipse cx="112" cy="45" rx="14" ry="10" fill="#628a45" opacity=".75" transform="rotate(4 112 45)"/>
+            </g>
+          </g>
 
           <!-- ================= carroceria de madeira ================= -->
           <!-- assoalho -->
-          <rect x="24" y="110" width="188" height="13" rx="2" fill="#7a5230"/>
+          <rect x="24" y="120" width="188" height="13" rx="2" fill="#7a5230"/>
           <!-- lateral de ripas -->
-          <rect x="24" y="70" width="188" height="41" rx="2" fill="url(#mad)"/>
+          <rect x="24" y="80" width="188" height="41" rx="2" fill="url(#mad)"/>
           <!-- ripas verticais -->
           <g stroke="#6d4526" stroke-width="1.6" opacity=".5">
-            <line x1="45"  y1="72" x2="45"  y2="110"/>
-            <line x1="66"  y1="72" x2="66"  y2="110"/>
-            <line x1="87"  y1="72" x2="87"  y2="110"/>
-            <line x1="129" y1="72" x2="129" y2="110"/>
-            <line x1="150" y1="72" x2="150" y2="110"/>
-            <line x1="171" y1="72" x2="171" y2="110"/>
-            <line x1="192" y1="72" x2="192" y2="110"/>
+            <line x1="45"  y1="82" x2="45"  y2="120"/>
+            <line x1="66"  y1="82" x2="66"  y2="120"/>
+            <line x1="87"  y1="82" x2="87"  y2="120"/>
+            <line x1="129" y1="82" x2="129" y2="120"/>
+            <line x1="150" y1="82" x2="150" y2="120"/>
+            <line x1="171" y1="82" x2="171" y2="120"/>
+            <line x1="192" y1="82" x2="192" y2="120"/>
           </g>
           <!-- travessas -->
-          <rect x="24" y="82"  width="188" height="3" fill="#dcae72" opacity=".45"/>
-          <rect x="24" y="99"  width="188" height="3" fill="#5f3d21" opacity=".45"/>
+          <rect x="24" y="92"  width="188" height="3" fill="#dcae72" opacity=".45"/>
+          <rect x="24" y="109" width="188" height="3" fill="#5f3d21" opacity=".45"/>
           <!-- estacas vermelhas -->
           <g fill="url(#lat)">
-            <rect x="24"  y="52" width="7" height="59" rx="2"/>
-            <rect x="105" y="52" width="7" height="59" rx="2"/>
-            <rect x="205" y="52" width="7" height="59" rx="2"/>
+            <rect x="24"  y="62" width="7" height="59" rx="2"/>
+            <rect x="105" y="62" width="7" height="59" rx="2"/>
+            <rect x="205" y="62" width="7" height="59" rx="2"/>
           </g>
           <!-- travessa superior das estacas -->
-          <rect x="24" y="52" width="188" height="6" rx="2" fill="#a83c28"/>
+          <rect x="24" y="62" width="188" height="6" rx="2" fill="#a83c28"/>
 
           <!-- ================= cabine ================= -->
-          <path d="M212 123 V70 q0-9 9-9 h48 l20 27 h27 q7 0 7 7 v28 z" fill="url(#lat)"/>
+          <path d="M212 133 V80 q0-9 9-9 h48 l20 27 h27 q7 0 7 7 v28 z" fill="url(#lat)"/>
           <!-- vidro -->
-          <path d="M224 72 h42 l16 22 h-58 z" fill="url(#vidro)"/>
+          <path d="M224 82 h42 l16 22 h-58 z" fill="url(#vidro)"/>
           <!-- brilho no vidro -->
-          <path d="M228 74 h12 l-8 18 h-6 z" fill="#fff" opacity=".13"/>
+          <path d="M228 84 h12 l-8 18 h-6 z" fill="#fff" opacity=".13"/>
           <!-- friso da porta -->
-          <rect x="219" y="98" width="76" height="1.6" fill="#6d2418" opacity=".55"/>
+          <rect x="219" y="108" width="76" height="1.6" fill="#6d2418" opacity=".55"/>
 
           <!-- adesivo preto da porta -->
           <g>
-            <rect x="226" y="103" width="52" height="16" rx="1.5" fill="#191007"/>
-            <rect x="230" y="106.5" width="3.2" height="3.2" fill="#c99a5b" transform="rotate(45 231.6 108.1)"/>
-            <rect x="236" y="106.5" width="3.2" height="3.2" fill="#a8412c" transform="rotate(45 237.6 108.1)"/>
-            <rect x="243" y="106" width="31" height="2.4" rx="1" fill="#efe6d6" opacity=".9"/>
-            <rect x="230" y="112" width="44" height="1.7" rx=".8" fill="#c9b59d" opacity=".65"/>
-            <rect x="230" y="115.4" width="34" height="1.7" rx=".8" fill="#c99a5b" opacity=".8"/>
+            <rect x="226" y="113" width="52" height="16" rx="1.5" fill="#191007"/>
+            <rect x="230" y="116.5" width="3.2" height="3.2" fill="#c99a5b" transform="rotate(45 231.6 118.1)"/>
+            <rect x="236" y="116.5" width="3.2" height="3.2" fill="#a8412c" transform="rotate(45 237.6 118.1)"/>
+            <rect x="243" y="116" width="31" height="2.4" rx="1" fill="#efe6d6" opacity=".9"/>
+            <rect x="230" y="122" width="44" height="1.7" rx=".8" fill="#c9b59d" opacity=".65"/>
+            <rect x="230" y="125.4" width="34" height="1.7" rx=".8" fill="#c99a5b" opacity=".8"/>
           </g>
 
           <!-- retrovisor -->
-          <rect x="214" y="66" width="3" height="12" rx="1" fill="#2b1c14"/>
-          <rect x="209" y="63" width="8" height="6" rx="1.5" fill="#3d2a1e"/>
+          <rect x="214" y="76" width="3" height="12" rx="1" fill="#2b1c14"/>
+          <rect x="209" y="73" width="8" height="6" rx="1.5" fill="#3d2a1e"/>
 
           <!-- ================= capô ================= -->
-          <path d="M316 96 v27 h74 q6 0 6-6 v-15 q0-6 -6-6 z" fill="url(#lat)"/>
+          <path d="M316 106 v27 h74 q6 0 6-6 v-15 q0-6 -6-6 z" fill="url(#lat)"/>
           <!-- vinco do capô -->
-          <rect x="320" y="103" width="70" height="1.6" fill="#7d2e1f" opacity=".5"/>
+          <rect x="320" y="113" width="70" height="1.6" fill="#7d2e1f" opacity=".5"/>
           <!-- grade -->
-          <rect x="378" y="103" width="16" height="15" rx="1.5" fill="#e6ded0"/>
+          <rect x="378" y="113" width="16" height="15" rx="1.5" fill="#e6ded0"/>
           <g fill="#8a8175">
-            <rect x="380" y="105" width="2" height="11"/>
-            <rect x="384" y="105" width="2" height="11"/>
-            <rect x="388" y="105" width="2" height="11"/>
+            <rect x="380" y="115" width="2" height="11"/>
+            <rect x="384" y="115" width="2" height="11"/>
+            <rect x="388" y="115" width="2" height="11"/>
           </g>
           <!-- farol -->
-          <circle cx="372" cy="107" r="5.4" fill="#f0e6d2"/>
-          <circle cx="372" cy="107" r="2.6" fill="#c9bda6"/>
+          <circle cx="372" cy="117" r="5.4" fill="#f0e6d2"/>
+          <circle cx="372" cy="117" r="2.6" fill="#c9bda6"/>
           <!-- para-choque -->
-          <rect x="372" y="123" width="26" height="7" rx="2" fill="#cfc6b8"/>
+          <rect x="372" y="133" width="26" height="7" rx="2" fill="#cfc6b8"/>
+          </g><!-- /corpo -->
 
           <!-- ================= rodas ================= -->
-          <g>
-            <circle cx="78"  cy="130" r="26" fill="#1c120c"/>
-            <circle cx="78"  cy="130" r="13" fill="#5c5148"/>
-            <circle cx="78"  cy="130" r="4.5" fill="#2b211a"/>
-            <circle cx="340" cy="130" r="26" fill="#1c120c"/>
-            <circle cx="340" cy="130" r="13" fill="#5c5148"/>
-            <circle cx="340" cy="130" r="4.5" fill="#2b211a"/>
+          <g class="roda">
+            <circle cx="78" cy="140" r="26" fill="#1c120c"/>
+            <circle cx="78" cy="140" r="13" fill="#5c5148"/>
+            <g stroke="#2b211a" stroke-width="2.6" stroke-linecap="round">
+              <line x1="78" y1="129" x2="78" y2="151"/>
+              <line x1="67" y1="140" x2="89" y2="140"/>
+              <line x1="70.2" y1="132.2" x2="85.8" y2="147.8"/>
+              <line x1="70.2" y1="147.8" x2="85.8" y2="132.2"/>
+            </g>
+            <circle cx="78" cy="140" r="4.5" fill="#2b211a"/>
           </g>
+          <g class="roda">
+            <circle cx="340" cy="140" r="26" fill="#1c120c"/>
+            <circle cx="340" cy="140" r="13" fill="#5c5148"/>
+            <g stroke="#2b211a" stroke-width="2.6" stroke-linecap="round">
+              <line x1="340" y1="129" x2="340" y2="151"/>
+              <line x1="329" y1="140" x2="351" y2="140"/>
+              <line x1="332.2" y1="132.2" x2="347.8" y2="147.8"/>
+              <line x1="332.2" y1="147.8" x2="347.8" y2="132.2"/>
+            </g>
+            <circle cx="340" cy="140" r="4.5" fill="#2b211a"/>
+          </g>
+          </g><!-- /veiculo -->
+
+          <!-- poeira atrás da roda traseira -->
+          <g class="poeira" fill="#c9a97e">
+            <circle cx="48" cy="152" r="6"/>
+            <circle cx="40" cy="146" r="5"/>
+            <circle cx="55" cy="156" r="7"/>
+            <circle cx="34" cy="152" r="4.5"/>
+            <circle cx="60" cy="148" r="5.5"/>
+            <circle cx="45" cy="158" r="6.5"/>
+          </g>
+
           <!-- chão -->
-          <rect x="0" y="155" width="430" height="1.4" fill="#e3bd85" opacity=".22"/>
+          <rect x="0" y="165" width="430" height="1.4" fill="#e3bd85" opacity=".22"/>
         </svg>
       </div>
     </div>
@@ -611,6 +824,73 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
   </div>
 </div>
 
+<div class="modal-fundo" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+  <div class="modal">
+    <button type="button" class="modal-x" id="modal-x" aria-label="Fechar">&times;</button>
+    <h3 id="modal-titulo">Três informações e já passo o preço</h3>
+    <p class="modal-sub">Assim eu já sei onde é e respondo mais rápido.</p>
+
+    <form id="form-lead" novalidate>
+      <div class="campo" id="c-nome">
+        <label for="f-nome">Seu nome</label>
+        <input type="text" id="f-nome" name="nome" autocomplete="name" autocapitalize="words" required>
+        <span class="erro">Escreva seu nome.</span>
+      </div>
+
+      <div class="campo" id="c-tel">
+        <label for="f-tel">Seu WhatsApp</label>
+        <input type="tel" id="f-tel" name="tel" inputmode="numeric" autocomplete="tel" placeholder="(31) 99999-9999" maxlength="16" required>
+        <span class="erro">Falta o DDD ou algum número.</span>
+      </div>
+
+      <div class="campo" id="c-bairro">
+        <label for="f-bairro">Bairro</label>
+        <select id="f-bairro" name="bairro" required>
+          <option value="">Escolha o bairro</option>
+          <option>São Bento</option>
+          <option>Santa Lúcia</option>
+          <option>Santo Antônio</option>
+          <option>Sion</option>
+          <option>São Pedro</option>
+          <option>Luxemburgo</option>
+          <option>Mangabeiras</option>
+          <option>Lourdes</option>
+          <option>Coração de Jesus</option>
+          <option>Belvedere</option>
+          <option>Centro</option>
+          <option>Cidade Jardim</option>
+          <option>Carmo</option>
+          <option>Funcionários</option>
+          <option>Savassi</option>
+          <option>Anchieta</option>
+          <option>Santo Agostinho</option>
+          <option>Barro Preto</option>
+          <option>Boa Viagem</option>
+          <option>Cruzeiro</option>
+          <option>Serra</option>
+          <option>Buritis</option>
+          <option>Vila Paris</option>
+          <option value="_outro">Outro bairro</option>
+        </select>
+        <span class="erro">Escolha o bairro.</span>
+      </div>
+
+      <div class="campo" id="c-outro" style="display:none">
+        <label for="f-outro">Qual bairro?</label>
+        <input type="text" id="f-outro" name="outro" autocapitalize="words">
+        <span class="erro">Escreva o nome do bairro.</span>
+      </div>
+
+      <button type="submit" class="cta">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.4.2-.6.1-1.4-.6-2.6-1.7-3.4-3-.1-.2-.1-.4.1-.6l.7-.8c.2-.2.2-.4.1-.6l-.9-2.1c-.2-.5-.4-.4-.6-.4h-.6c-.2 0-.6.1-.9.4-1.1 1.1-1.2 2.6-.4 4.1 1.1 2.1 2.9 3.9 5.1 4.9 1.5.7 2.6.6 3.5.1.5-.3.9-.8 1.1-1.3.1-.3.1-.6 0-.7l-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+        Ir para o WhatsApp
+      </button>
+    </form>
+
+    <button type="button" class="pular" id="pular">Prefiro só chamar no WhatsApp</button>
+  </div>
+</div>
+
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -630,10 +910,9 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
 (function(){
   "use strict";
 
-  /* ====== PREENCHER ANTES DE PUBLICAR ====== */
-  var CONVERSAO_ID    = null;  // ex: "AW-123456789"
-  var CONVERSAO_LABEL = null;  // ex: "AbC-D_efGhIjKlMnOp"
-  /* ========================================= */
+  /* ====== conversão "Contato" do Google Ads ====== */
+  var SEND_TO = "AW-18371445900/7VMUCMyL2uAcEIyJmLhE";
+  /* =============================================== */
 
   var FONE = "5531983920672";
 
@@ -668,9 +947,13 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
       dt:'Chega no horário <em>e cobra o combinado</em>',
       dp:'Deveria ser o básico, mas no ramo de carreto virou diferencial. É por isso que a maior parte do nosso serviço chega por indicação.',
       c:'Pedir orçamento', b:'Pedir orçamento',
-      m:'Olá, vi o anúncio no Google. Quero um orçamento.'
+      m:'Olá, vi o anúncio no Google. Quero um orçamento.',
+      servico:'um orçamento'
     }
   };
+  V.entulho.servico = 'retirada de entulho';
+  V.poda.servico    = 'poda de árvore';
+  V.carreto.servico = 'um carreto';
 
   function set(id,val,html){
     var el=document.getElementById(id); if(!el) return;
@@ -707,21 +990,203 @@ footer a{color:var(--caramelo-claro);font-weight:600;text-decoration:none}
     alvos.forEach(function(el){el.classList.add("ver")});
   }
 
-  if(CONVERSAO_ID){
-    var s=document.createElement("script");
-    s.async=true; s.src="https://www.googletagmanager.com/gtag/js?id="+CONVERSAO_ID;
-    document.head.appendChild(s);
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=function(){window.dataLayer.push(arguments)};
-    gtag("js",new Date()); gtag("config",CONVERSAO_ID);
+  /* o caminhão só chega quando entra na tela */
+  var cam=document.querySelector(".caminhao");
+  if(cam){
+    if("IntersectionObserver" in window){
+      var obsCam=new IntersectionObserver(function(ents){
+        ents.forEach(function(e){
+          if(e.isIntersecting){e.target.classList.add("rodando");obsCam.unobserve(e.target);}
+        });
+      },{threshold:.3});
+      obsCam.observe(cam);
+    }else{
+      cam.classList.add("rodando");
+    }
+
+    /* ---------------------------------------------------------
+       buzina: dois toques curtos, sintetizados na hora.
+       Só no clique, nunca sozinha. Navegador bloqueia áudio sem
+       interação, e som inesperado em quem chegou de anúncio
+       espanta mais do que encanta.
+       --------------------------------------------------------- */
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    var ctx = null, ocupado = false;
+
+    function toque(t0, dur, vol){
+      var saida = ctx.createGain();
+      var filtro = ctx.createBiquadFilter();
+      filtro.type = "lowpass";
+      filtro.frequency.value = 2100;
+      filtro.Q.value = .7;
+      filtro.connect(saida);
+      saida.connect(ctx.destination);
+
+      saida.gain.setValueAtTime(.0001, t0);
+      saida.gain.exponentialRampToValueAtTime(vol, t0 + .014);
+      saida.gain.setValueAtTime(vol, t0 + dur - .045);
+      saida.gain.exponentialRampToValueAtTime(.0001, t0 + dur);
+
+      /* buzina de caminhonete é dupla: duas notas em terça */
+      [[370, .55],[466, .34],[740, .11]].forEach(function(par){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type = "sawtooth";
+        o.frequency.setValueAtTime(par[0], t0);
+        o.frequency.linearRampToValueAtTime(par[0] * .985, t0 + dur);
+        g.gain.value = par[1];
+        o.connect(g); g.connect(filtro);
+        o.start(t0); o.stop(t0 + dur + .02);
+      });
+    }
+
+    function buzinar(){
+      if(ocupado) return;
+      if(!Ctx) return;
+      if(!ctx) ctx = new Ctx();
+      if(ctx.state === "suspended") ctx.resume();
+
+      ocupado = true;
+      var t = ctx.currentTime + .02;
+      toque(t,        .12, .17);
+      toque(t + .205, .155, .17);
+
+      cam.classList.remove("buzinou");
+      void cam.offsetWidth;
+      cam.classList.add("buzinou");
+      setTimeout(function(){ ocupado = false; }, 620);
+    }
+
+    cam.addEventListener("click", buzinar);
+    cam.addEventListener("keydown", function(e){
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); buzinar(); }
+    });
   }
 
-  document.addEventListener("click",function(e){
-    var a=e.target.closest("[data-conv]"); if(!a) return;
-    if(CONVERSAO_ID&&CONVERSAO_LABEL&&typeof window.gtag==="function"){
-      gtag("event","conversion",{send_to:CONVERSAO_ID+"/"+CONVERSAO_LABEL});
+  /* =========================================================
+     CONVERSÃO
+     Dispara e só depois navega. O snippet padrão do Google usa
+     event_callback sem rede de segurança: se o gtag for bloqueado
+     ou a rede travar, o callback nunca roda e o visitante fica
+     preso na página. O timeout abaixo garante que ele sempre vai.
+     ========================================================= */
+  function converter(destino){
+    var foi=false;
+    function segue(){
+      if(foi) return;
+      foi=true;
+      if(destino) window.location.href = destino;
     }
-  },true);
+    if(typeof window.gtag === "function"){
+      gtag("event","conversion",{
+        send_to: SEND_TO,
+        value: 1.0,
+        currency: "BRL",
+        event_callback: segue
+      });
+      setTimeout(segue, 1200);
+    } else {
+      segue();
+    }
+  }
+
+  /* ---------- modal ---------- */
+  var modal   = document.getElementById("modal");
+  var form    = document.getElementById("form-lead");
+  var fNome   = document.getElementById("f-nome");
+  var fTel    = document.getElementById("f-tel");
+  var fBairro = document.getElementById("f-bairro");
+  var fOutro  = document.getElementById("f-outro");
+  var cOutro  = document.getElementById("c-outro");
+  var ultimoFoco = null;
+
+  function abrirModal(){
+    ultimoFoco = document.activeElement;
+    modal.classList.add("abre");
+    document.body.style.overflow = "hidden";
+    setTimeout(function(){ fNome.focus(); }, 60);
+  }
+  function fecharModal(){
+    modal.classList.remove("abre");
+    document.body.style.overflow = "";
+    if(ultimoFoco) ultimoFoco.focus();
+  }
+
+  document.getElementById("modal-x").addEventListener("click", fecharModal);
+  modal.addEventListener("click", function(e){ if(e.target === modal) fecharModal(); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && modal.classList.contains("abre")) fecharModal();
+  });
+
+  /* mostra o campo de texto quando escolhe "Outro bairro" */
+  fBairro.addEventListener("change", function(){
+    var outro = fBairro.value === "_outro";
+    cOutro.style.display = outro ? "" : "none";
+    if(outro) setTimeout(function(){ fOutro.focus(); }, 40);
+  });
+
+  /* máscara de telefone */
+  fTel.addEventListener("input", function(){
+    var d = fTel.value.replace(/\D/g,"").slice(0,11);
+    var s = "";
+    if(d.length > 0) s = "(" + d.slice(0,2);
+    if(d.length >= 3) s += ") " + (d.length > 10 ? d.slice(2,7) : d.slice(2,6));
+    if(d.length >= 7) s += "-" + (d.length > 10 ? d.slice(7) : d.slice(6));
+    fTel.value = s;
+  });
+
+  function marca(id, ruim){
+    document.getElementById(id).classList[ruim ? "add" : "remove"]("invalido");
+    return !ruim;
+  }
+
+  /* ---------- envio ---------- */
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    var nome   = fNome.value.trim();
+    var digitos= fTel.value.replace(/\D/g,"");
+    var bairro = fBairro.value;
+    var outro  = fOutro.value.trim();
+
+    var ok = true;
+    ok = marca("c-nome",   nome.length < 2) && ok;
+    ok = marca("c-tel",    digitos.length < 10) && ok;
+    ok = marca("c-bairro", !bairro) && ok;
+    if(bairro === "_outro") ok = marca("c-outro", outro.length < 2) && ok;
+    if(!ok){
+      var falho = form.querySelector(".invalido input, .invalido select");
+      if(falho) falho.focus();
+      return;
+    }
+
+    var local = bairro === "_outro" ? outro : bairro;
+    var texto = "Oi, aqui é " + nome + ", do " + local + ". Preciso de "
+              + v.servico + ". Meu telefone é " + fTel.value + ".";
+
+    converter("https://wa.me/" + FONE + "?text=" + encodeURIComponent(texto));
+  });
+
+  /* ---------- pular o formulário ---------- */
+  document.getElementById("pular").addEventListener("click", function(){
+    converter(link);
+  });
+
+  /* ---------- interceptar os CTAs ---------- */
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("[data-conv]");
+    if(!a) return;
+
+    if(a.getAttribute("data-conv") === "whatsapp"){
+      e.preventDefault();
+      abrirModal();
+      return;
+    }
+    /* ligação: converte e deixa o tel: seguir normalmente */
+    if(typeof window.gtag === "function"){
+      gtag("event","conversion",{send_to:SEND_TO, value:1.0, currency:"BRL"});
+    }
+  });
 })();
 </script>
 
